@@ -242,6 +242,7 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
 
     // face the opponent (neutral states only — never mid-attack or in stun)
     if (neutralGround(f)) f.face = cx(foe) >= cx(f) ? 1 : -1;
+    if (f.state !== 'idle') f.idleT = 0;
 
     const dirHeld = (c.isDown('right') ? 1 : 0) - (c.isDown('left') ? 1 : 0);
 
@@ -578,9 +579,10 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
       raging: f.rageActive ? 1 : 0,
       axeOut: !!f.sp.axe,
       fireCd: 0,
-      smoking: f.idleT > 3 && f.char.id === 'sickman',
-      thinking: f.idleT > 3 && f.char.id === 'mrb',
     };
+    // idle quirk from the character definition (smoking / thinking / listening…)
+    const quirk = f.char.sprite.idle;
+    if (quirk) pose[quirk.flag] = f.state === 'idle' && f.idleT > quirk.after;
     f.char.sprite.draw(g, pose, clock);
 
     // ---- pose overlays (sprite space, 22×30)

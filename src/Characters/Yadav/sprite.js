@@ -48,4 +48,33 @@ export function drawBody(g, p, clock) {
   g.fillStyle = '#b8c0c8'; g.fillRect(hx, hy, 7, 9);
   g.fillStyle = '#8a949c'; g.fillRect(hx, hy, 7, 2.5);
   g.fillStyle = '#d8dee4'; g.fillRect(hx + 1.5, hy - 2, 4, 2);
+
+  // idle for a bit → lo-fi beats while the pipeline runs
+  if (p.listening) {
+    const beat = Math.sin(clock / 180);
+    // headphone band over the hair
+    g.strokeStyle = '#20262e'; g.lineWidth = 2;
+    g.beginPath();
+    g.arc(x + p.w / 2, y + 4, p.w / 2 - 3.5, Math.PI * 1.05, Math.PI * 1.95);
+    g.stroke();
+    // ear cups with a glowing indicator
+    g.fillStyle = '#20262e';
+    g.fillRect(x + 2.5, y + 3.5, 3.5, 6);
+    g.fillRect(x + p.w - 6, y + 3.5, 3.5, 6);
+    g.fillStyle = beat > 0 ? '#7ee787' : '#3fae56';
+    g.fillRect(x + 3.5, y + 6, 1.5, 1.5);
+    g.fillRect(x + p.w - 5, y + 6, 1.5, 1.5);
+    // floating music notes
+    g.font = 'bold 7px "Trebuchet MS", sans-serif';
+    g.textAlign = 'center';
+    for (let i = 0; i < 3; i++) {
+      const ph = (clock / 700 + i * 0.33) % 1;
+      const nx = x + p.w / 2 + (p.face > 0 ? 14 : -14) + Math.sin(ph * 9 + i * 2) * 3;
+      const ny = y - 2 - ph * 16;
+      g.globalAlpha = Math.max(0, 1 - ph) * 0.9;
+      g.fillStyle = i % 2 ? '#9fe8ff' : '#7ee787';
+      g.fillText(i % 2 ? '♫' : '♪', nx, ny);
+    }
+    g.globalAlpha = 1;
+  }
 }

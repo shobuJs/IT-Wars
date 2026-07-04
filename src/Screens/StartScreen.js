@@ -51,6 +51,7 @@ export default {
         face: i < n / 2 ? 1 : -1, anim: 0, onGround: true,
         big: false, axeOut: false, raging: 0, fireCd: 0,
         smoking: c.id === 'sickman', thinking: c.id === 'mrb' && Math.sin(t * 0.4) > 0.2,
+        listening: c.id === 'yadav',
       }, app.clock);
       g.restore();
       // name tag

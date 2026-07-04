@@ -14,5 +14,5 @@ export default {
   moves,
   dialogs,
   abilities: { special, rage },
-  sprite: { draw: drawBody, w: 22, h: 30, skin: '#e8b88a' },
+  sprite: { draw: drawBody, w: 22, h: 30, skin: '#e8b88a', idle: { flag: 'smoking', after: 3 } },
 };
