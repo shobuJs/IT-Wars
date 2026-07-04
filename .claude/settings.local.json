@@ -3,7 +3,9 @@
     "allow": [
       "Bash(node verify-game.js)",
       "Bash(node -e ' *)",
-      "Bash(node verify-final.js)"
+      "Bash(node verify-final.js)",
+      "PowerShell(node \"C:\\\\Users\\\\SHAHBA~1.AHM\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Shahbaz-01-My-Stuff-08-Research-POCs-games-Mario-light\\\\ead03b14-f355-49d9-91ff-bce69b2ef32b\\\\scratchpad\\\\harness.mjs\" \"d:\\\\Shahbaz\\\\01-My-Stuff\\\\08-Research-POCs\\\\games\\\\Mario-light\\\\src\\\\main.js\")",
+      "PowerShell(Start-Process -WindowStyle Hidden python -ArgumentList '-m','http.server','8321','--directory','d:\\\\Shahbaz\\\\01-My-Stuff\\\\08-Research-POCs\\\\games\\\\Mario-light'; Start-Sleep -Seconds 2; \\(Invoke-WebRequest -UseBasicParsing http://localhost:8321/index.html\\).StatusCode)"
     ]
   }
 }
