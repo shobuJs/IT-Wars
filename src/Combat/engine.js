@@ -3,6 +3,7 @@
 // from the character definitions and the arena.
 import { aabb, clamp } from '../Shared/math.js';
 import { SFX } from '../Shared/audio.js';
+import { createDialogs } from './dialogs.js';
 
 const GRAV = 1500;
 const MAXFALL = 1000;
@@ -59,6 +60,7 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
   let enabled = false;
   let cinematic = null;          // {t, name, color, after}
   let debug = false;
+  const dialogs = createDialogs();
 
   const api = {
     arena,
@@ -172,6 +174,9 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
       fx.flash('rgba(255,0,0,0.35)', 0.5);
       return;
     }
+
+    // office trash talk — attacker mocks the victim's job role
+    dialogs.onHit(attacker, victim, heavy);
 
     if (hit.launch && victim.juggleHits < 1) {
       victim.state = 'launched';
@@ -449,7 +454,7 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
     get debug() { return debug; },
     toggleDebug() { debug = !debug; },
     setEnabled(v) { enabled = v; },
-    resetRound() { positionForRound(); },   // rage meters persist by design
+    resetRound() { positionForRound(); dialogs.clear(); },   // rage meters persist by design
 
     update(dt) {
       if (cinematic) {
@@ -475,6 +480,11 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
         }
       }
       particles.update(dt);
+      dialogs.update(dt, fighters);
+    },
+
+    sayVictory(side) {
+      dialogs.onVictory(side === 'left' ? left : right);
     },
 
     snapshot() {
@@ -503,6 +513,7 @@ export function createFight({ arena, leftChar, rightChar, leftController, rightC
       }
       particles.render(g);
       particles.renderTexts(g);
+      dialogs.render(g);
       if (debug) renderDebug(g);
     },
   };

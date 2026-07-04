@@ -5,6 +5,7 @@ import * as audio from './Shared/audio.js';
 import { createInput } from './GameEngine/Input.js';
 import { createScreenManager } from './GameEngine/ScreenManager.js';
 import { createTouchControls } from './UI/TouchControls.js';
+import StartScreen from './Screens/StartScreen.js';
 import MainMenuScreen from './Screens/MainMenuScreen.js';
 import ModeSelectScreen from './Screens/ModeSelectScreen.js';
 import ArenaSelectScreen from './Screens/ArenaSelectScreen.js';
@@ -31,6 +32,7 @@ const app = {
 };
 app.touch = createTouchControls(app.input);
 
+app.screens.register('start', StartScreen);
 app.screens.register('mainMenu', MainMenuScreen);
 app.screens.register('modeSelect', ModeSelectScreen);
 app.screens.register('arenaSelect', ArenaSelectScreen);
@@ -91,7 +93,7 @@ if (params.get('screen')) {
   app.session.aiCharId = params.get('ai') || 'kratos';
   app.screens.goto(app, params.get('screen'));
 } else {
-  app.screens.goto(app, 'mainMenu');
+  app.screens.goto(app, 'start');
 }
 requestAnimationFrame(frame);
 

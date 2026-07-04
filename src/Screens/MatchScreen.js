@@ -147,6 +147,7 @@ export default {
             const winner = lf > rf ? fight.left : fight.right;
             winner.state = 'victory'; winner.stateT = 0;
             wins[lf > rf ? 'left' : 'right']++;
+            fight.sayVictory(lf > rf ? 'left' : 'right');
             showBanner("TIME'S UP", `${winner.char.name} WINS ROUND ${round}`, '#ffd93d', 1.8);
             matchState = 'roundEnd';
             stateT = 0;
@@ -162,6 +163,7 @@ export default {
           const winner = side === 'left' ? fight.left : fight.right;
           winner.state = 'victory'; winner.stateT = 0;
           wins[side]++;
+          fight.sayVictory(side);
           matchState = 'roundEnd';
           stateT = 0;
           showBanner(`${winner.char.name}`, `WINS ROUND ${round}`, winner.char.palette.accent, 2.0);

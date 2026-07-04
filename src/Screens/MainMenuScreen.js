@@ -51,6 +51,7 @@ export default {
     if (inp.justPressed('left')) { sel = (sel + CARDS.length - 1) % CARDS.length; app.audio.SFX.menuMove(); }
     if (inp.justPressed('right')) { sel = (sel + 1) % CARDS.length; app.audio.SFX.menuMove(); }
     if (inp.justPressed('confirm')) choose(app, sel);
+    if (inp.justPressed('back')) app.screens.goto(app, 'start');
   },
 
   onPointer(app, x, y, type) {

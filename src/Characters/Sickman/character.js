@@ -1,5 +1,6 @@
 import stats from './stats.js';
 import moves from './moves.js';
+import dialogs from './dialogs.js';
 import { special, rage } from './abilities.js';
 import { drawBody } from './sprite.js';
 
@@ -11,6 +12,7 @@ export default {
   blurb: ['Fast & fragile rushdown', 'Special: Bottle Toss 🍺', 'Rage: Meltdown'],
   stats,
   moves,
+  dialogs,
   abilities: { special, rage },
   sprite: { draw: drawBody, w: 22, h: 30, skin: '#e8b88a' },
 };

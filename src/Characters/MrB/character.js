@@ -1,5 +1,6 @@
 import stats from './stats.js';
 import moves from './moves.js';
+import dialogs from './dialogs.js';
 import { special, rage } from './abilities.js';
 import { drawBody } from './sprite.js';
 
@@ -11,6 +12,7 @@ export default {
   blurb: ['Zoner — keep away', 'Special: Coffee Splash ☕', 'Rage: Coffee Tsunami'],
   stats,
   moves,
+  dialogs,
   abilities: { special, rage },
   sprite: { draw: drawBody, w: 22, h: 30, skin: '#f2d4b0' },
 };

@@ -64,13 +64,13 @@ your root access.
     ├── main.js              Boot, shared app context, the one rAF loop
     ├── GameEngine/          ScreenManager, action-mapped Input
     ├── Shared/              audio synth, math, constants
-    ├── Screens/             MainMenu → ModeSelect → ArenaSelect → CharacterSelect → Match → Result
+    ├── Screens/             Start → MainMenu → ModeSelect → ArenaSelect → CharacterSelect → Match → Result
     ├── UI/                  widgets, match HUD, touch controls
     ├── Effects/             particles (blood/gibs/sparks/text), screen shake/flash/hitstop
     ├── Characters/          one folder per fighter + registry (index.js)
-    │   └── <Name>/          character.js, stats.js, moves.js, abilities.js, sprite.js
+    │   └── <Name>/          character.js, stats.js, moves.js, abilities.js, dialogs.js, sprite.js
     ├── Arenas/              one folder per arena + registry (index.js)
-    └── Combat/              engine.js (state machine, hits, combos), ai.js
+    └── Combat/              engine.js (state machine, hits, combos), ai.js, dialogs.js
 ```
 
 ## Adding content
@@ -90,6 +90,12 @@ then swap its "COMING SOON" stub in `src/Arenas/index.js` for the import.
 **New ability:** abilities are plug-in objects (`onActivate`, `onUpdate`,
 `onDraw`) driven by a stable combat API (`spawnProjectile`, `tryHit`, particles,
 shake, freeze, sfx…). See any `abilities.js` for the pattern.
+
+**New dialogs:** each fighter's trash talk lives in their own `dialogs.js`
+with typed pools — `onHurt` (what opponents shout when they land a hit on this
+character, mocking their job role) and `onVictory` (round-win one-liners).
+Add lines to the arrays; the dialog engine (`src/Combat/dialogs.js`) shows
+them as speech bubbles with cooldowns so combos don't become stand-up sets.
 
 ## Roadmap
 
