@@ -1,9 +1,11 @@
 // Arena registry — the ONLY file to touch when adding an arena:
 // build Arenas/<Name>/index.js and swap its locked stub for an import.
 import office from './OfficeArena/index.js';
+import awesome from './AwesomeArea/index.js';
 
 export const ARENAS = [
   office,
+  awesome,
   { id: 'server-room', name: 'SERVER ROOM', locked: true, icon: '🖥️' },
   { id: 'data-center', name: 'DATA CENTER', locked: true, icon: '💾' },
   { id: 'meeting-room', name: 'MEETING ROOM', locked: true, icon: '📊' },
