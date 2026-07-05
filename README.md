@@ -13,8 +13,12 @@ Zero dependencies. Plain HTML5 Canvas + vanilla JavaScript ES modules. No build 
 
 ## Run it
 
-ES modules don't load from `file://` — serve the folder with any static server
-and open the root page:
+**Easiest:** double-click **`PLAY IT WARS.bat`** — it starts a tiny local
+server and opens the game in your browser (needs Node.js). Quit from the
+main menu when you're done.
+
+**Or any static server** — ES modules don't load from `file://`, so serve
+the folder and open the root page:
 
 ```
 npx serve .            # or:
