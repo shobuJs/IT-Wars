@@ -37,7 +37,7 @@ export default {
   onPointer(app, x, y, type) {
     for (let i = 0; i < rects.length; i++) {
       if (pointInRect(x, y, rects[i])) {
-        if (type === 'move') sel = i;
+        if (type === 'move' && sel !== i) { sel = i; app.audio.SFX.menuMove(); }
         if (type === 'down') { sel = i; choose(app, i); }
       }
     }
@@ -69,16 +69,40 @@ export default {
       g.strokeStyle = selected ? c.palette.accent : 'rgba(255,255,255,0.25)';
       g.strokeRect(r.x, r.y, r.w, r.h);
 
-      // live breathing preview
+      // live preview: idle breathing normally; the hovered/selected fighter
+      // performs a showcase loop — walk cycle, then their signature quirk
       const bob = Math.sin(app.clock / 420 + i * 2) * 2;
-      g.save();
-      g.translate(r.x + r.w / 2 - c.sprite.w * 1.5, r.y + 36 + bob);
-      g.scale(3, 3);
-      c.sprite.draw(g, {
+      const pose = {
         x: 0, y: 0, w: c.sprite.w, h: c.sprite.h, vx: 0, face: 1, anim: 0,
         onGround: true, big: false, axeOut: false, raging: 0, fireCd: 0,
-      }, app.clock);
+      };
+      let scale = 3;
+      if (selected) {
+        scale = 3.35 + Math.sin(app.clock / 300) * 0.05;
+        const phase = (app.clock / 1000) % 3.2;
+        if (phase < 1.4) {
+          // strut in place
+          pose.vx = 60;
+          pose.anim = app.clock / 100;
+          pose.face = Math.floor(app.clock / 1600) % 2 ? -1 : 1;
+        } else {
+          // signature move: idle quirk, rage aura, or a muzzle flash
+          if (c.sprite.idle) pose[c.sprite.idle.flag] = true;
+          else if (c.id === 'kratos') pose.raging = 1;
+          else pose.fireCd = 0.3;
+        }
+      } else {
+        g.globalAlpha = 0.75;
+      }
+      g.save();
+      g.beginPath();
+      g.rect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
+      g.clip();
+      g.translate(r.x + r.w / 2 - c.sprite.w * scale / 2, r.y + 42 + bob - (scale - 3) * c.sprite.h);
+      g.scale(scale, scale);
+      c.sprite.draw(g, pose, app.clock);
       g.restore();
+      g.globalAlpha = 1;
 
       g.textAlign = 'center';
       g.font = `bold 21px ${FONT}`;
@@ -110,6 +134,39 @@ export default {
         g.fillRect(r.x + 42, by, (r.w - 56) * Math.min(1, v), 8);
       });
     }
+
+    // detail bar for the highlighted fighter
+    const c = CHARACTERS[sel];
+    const st = c.stats;
+    const barY = 468;
+    g.fillStyle = 'rgba(0,0,0,0.55)';
+    g.fillRect(60, barY, DESIGN_W - 120, 38);
+    g.strokeStyle = c.palette.accent;
+    g.lineWidth = 1;
+    g.strokeRect(60.5, barY + 0.5, DESIGN_W - 121, 37);
+    g.textAlign = 'center';
+    g.font = `bold 13px ${FONT}`;
+    g.fillStyle = COLORS.text;
+    g.fillText(
+      `HP ${st.maxHealth}   ·   SPEED ${st.walkSpeed}   ·   POWER ×${st.strength}   ·   DEFENSE ×${st.defense}`,
+      DESIGN_W / 2, barY + 15,
+    );
+    g.font = `12px ${FONT}`;
+    g.fillStyle = c.palette.title;
+    g.fillText(
+      `SPECIAL: ${c.abilities.special.name} (${c.abilities.special.cooldown}s)   ·   RAGE: ${c.abilities.rage.name}`,
+      DESIGN_W / 2, barY + 31,
+    );
+
+    // pulsing call to action under the selected panel
+    const r = rects[sel];
+    const pulse = 0.5 + 0.5 * Math.sin(app.clock / 200);
+    g.save();
+    g.globalAlpha = 0.5 + 0.5 * pulse;
+    g.font = `900 13px ${FONT}`;
+    g.fillStyle = c.palette.accent;
+    g.fillText('▶ PRESS ENTER TO FIGHT ◀', r.x + r.w / 2, r.y - 10);
+    g.restore();
 
     drawFooterHint(g, '← → select   ·   ENTER fight   ·   ESC back');
   },
