@@ -105,13 +105,13 @@ expectScreen('arenaSelect', 'choose Single Player');
 // try a locked arena first (move right twice past Awesome Area), expect rejection
 tap('ArrowRight'); frames(2); tap('ArrowRight'); frames(2); tap('Enter'); frames(2);
 expectScreen('arenaSelect', 'locked arena rejected');
-// pick AWESOME AREA (index 1) so the new arena gets exercised in the matches
-tap('ArrowLeft'); frames(2);
+// pick SCRUM ROOM (index 4) so the new arena gets exercised in the matches
+tap('ArrowRight'); frames(2); tap('ArrowRight'); frames(2);
 
 tap('Enter'); frames(2);
-expectScreen('characterSelect', 'choose Office Arena');
+expectScreen('characterSelect', 'choose Scrum Room');
 
-const roster = ['mario', 'kratos', 'yadav', 'sickman', 'mrb'];
+const roster = ['mario', 'kratos', 'yadav', 'sickman', 'mrb', 'anshuman'];
 let matchesPlayed = 0;
 
 async function playMatch(charIndex, label) {
