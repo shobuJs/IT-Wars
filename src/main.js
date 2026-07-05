@@ -12,6 +12,7 @@ import ArenaSelectScreen from './Screens/ArenaSelectScreen.js';
 import CharacterSelectScreen from './Screens/CharacterSelectScreen.js';
 import MatchScreen from './Screens/MatchScreen.js';
 import ResultScreen from './Screens/ResultScreen.js';
+import ShutdownScreen from './Screens/ShutdownScreen.js';
 
 const canvas = document.getElementById('game');
 const g = canvas.getContext('2d');
@@ -39,6 +40,7 @@ app.screens.register('arenaSelect', ArenaSelectScreen);
 app.screens.register('characterSelect', CharacterSelectScreen);
 app.screens.register('match', MatchScreen);
 app.screens.register('result', ResultScreen);
+app.screens.register('shutdown', ShutdownScreen);
 
 // ---- Letterbox scaling
 function resize() {

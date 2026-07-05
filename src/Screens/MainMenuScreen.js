@@ -23,18 +23,24 @@ const CARDS = [
 
 const rects = [];
 let sel = 0;
+const QUIT_RECT = { x: DESIGN_W / 2 - 90, y: 468, w: 180, h: 34 };
 
 function layout() {
   rects.length = 0;
   const w = 340, h = 240, gap = 60;
   const x0 = DESIGN_W / 2 - w - gap / 2;
-  const y = 180;
+  const y = 170;
   rects.push({ x: x0, y, w, h });
   rects.push({ x: DESIGN_W / 2 + gap / 2, y, w, h });
 }
 layout();
 
 function choose(app, i) {
+  if (i === 2) {
+    app.audio.SFX.menuMove();
+    app.screens.goto(app, 'shutdown');
+    return;
+  }
   app.audio.SFX.menuGo();
   if (CARDS[i].id === 'adventure') {
     location.href = 'OfficeAdventure/index.html';
@@ -48,8 +54,13 @@ export default {
 
   update(app) {
     const inp = app.input;
-    if (inp.justPressed('left')) { sel = (sel + CARDS.length - 1) % CARDS.length; app.audio.SFX.menuMove(); }
-    if (inp.justPressed('right')) { sel = (sel + 1) % CARDS.length; app.audio.SFX.menuMove(); }
+    if (sel < 2) {
+      if (inp.justPressed('left')) { sel = (sel + 1) % 2; app.audio.SFX.menuMove(); }
+      if (inp.justPressed('right')) { sel = (sel + 1) % 2; app.audio.SFX.menuMove(); }
+      if (inp.justPressed('down')) { sel = 2; app.audio.SFX.menuMove(); }
+    } else {
+      if (inp.justPressed('up') || inp.justPressed('left') || inp.justPressed('right')) { sel = 1; app.audio.SFX.menuMove(); }
+    }
     if (inp.justPressed('confirm')) choose(app, sel);
     if (inp.justPressed('back')) app.screens.goto(app, 'start');
   },
@@ -60,6 +71,10 @@ export default {
         if (type === 'move' && sel !== i) { sel = i; }
         if (type === 'down') { sel = i; choose(app, i); }
       }
+    }
+    if (pointInRect(x, y, QUIT_RECT)) {
+      if (type === 'move') sel = 2;
+      if (type === 'down') choose(app, 2);
     }
   },
 
@@ -91,6 +106,20 @@ export default {
       }
     }
 
-    drawFooterHint(g, '← → select   ·   ENTER confirm   ·   or click a card');
+    // quit game — stops the launcher server and frees the port
+    const qSel = sel === 2;
+    g.save();
+    g.fillStyle = qSel ? 'rgba(164,0,0,0.35)' : 'rgba(0,0,0,0.45)';
+    g.fillRect(QUIT_RECT.x, QUIT_RECT.y, QUIT_RECT.w, QUIT_RECT.h);
+    g.strokeStyle = qSel ? COLORS.bloodBright : 'rgba(255,255,255,0.25)';
+    g.lineWidth = qSel ? 2 : 1;
+    g.strokeRect(QUIT_RECT.x + 0.5, QUIT_RECT.y + 0.5, QUIT_RECT.w - 1, QUIT_RECT.h - 1);
+    g.font = `bold 15px ${FONT}`;
+    g.textAlign = 'center';
+    g.fillStyle = qSel ? COLORS.bloodBright : COLORS.text;
+    g.fillText('⏻ QUIT GAME', QUIT_RECT.x + QUIT_RECT.w / 2, QUIT_RECT.y + 22);
+    g.restore();
+
+    drawFooterHint(g, '← → ↓ select   ·   ENTER confirm   ·   or click');
   },
 };
