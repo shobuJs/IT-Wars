@@ -57,6 +57,7 @@ your root access.
 | YADAV JI | DevOps Engineer | Mid-range bruiser | Milk-Can Mortar 🥛 | Buffalo Stampede |
 | SICKMAN | IT Nerd | Fast & fragile | Bottle Toss 🍺 | Meltdown |
 | MR.B | Tech Enthusiast | Zoner | Coffee Splash ☕ | Coffee Tsunami |
+| THE ANSHUMAN | Sales Executive | Biggest tank | Grand Laughter 😂 | Target Achieved! |
 
 ## Project structure
 

@@ -5,6 +5,7 @@ import kratos from './Kratos/character.js';
 import yadav from './Yadav/character.js';
 import sickman from './Sickman/character.js';
 import mrb from './MrB/character.js';
+import anshuman from './Anshuman/character.js';
 
-export const CHARACTERS = [mario, kratos, yadav, sickman, mrb];
+export const CHARACTERS = [mario, kratos, yadav, sickman, mrb, anshuman];
 export const characterById = Object.fromEntries(CHARACTERS.map(c => [c.id, c]));

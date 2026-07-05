@@ -5,11 +5,16 @@ import { drawBackdrop, drawTitle, drawSubtitle, drawFooterHint } from '../UI/wid
 
 const rects = [];
 let sel = 0;
+const BASE_W = 170;   // panel width/layout at 5 or fewer fighters — unchanged look
 
 (function layout() {
   const n = CHARACTERS.length;
-  const w = 170, h = 300, gap = 14;
-  const x0 = (DESIGN_W - (n * w + (n - 1) * gap)) / 2;
+  const gap = 14, margin = 20;
+  // shrink panel width to fit any roster size; never wider than BASE_W
+  const w = Math.min(BASE_W, Math.floor((DESIGN_W - margin * 2 - gap * (n - 1)) / n));
+  const h = 300;
+  const totalW = n * w + (n - 1) * gap;
+  const x0 = (DESIGN_W - totalW) / 2;
   const y = 150;
   for (let i = 0; i < n; i++) rects.push({ x: x0 + i * (w + gap), y, w, h });
 })();
@@ -104,14 +109,16 @@ export default {
       g.restore();
       g.globalAlpha = 1;
 
+      // panels shrink to fit larger rosters — scale text down to match
+      const fs = Math.min(1, r.w / BASE_W);
       g.textAlign = 'center';
-      g.font = `bold 21px ${FONT}`;
+      g.font = `bold ${Math.round(21 * fs)}px ${FONT}`;
       g.fillStyle = '#fff';
       g.fillText(c.name, r.x + r.w / 2, r.y + 156);
-      g.font = `bold 12px ${FONT}`;
+      g.font = `bold ${Math.round(12 * fs)}px ${FONT}`;
       g.fillStyle = c.palette.title;
       g.fillText(c.role, r.x + r.w / 2, r.y + 174);
-      g.font = `11px ${FONT}`;
+      g.font = `${Math.round(11 * fs)}px ${FONT}`;
       g.fillStyle = 'rgba(255,255,255,0.9)';
       c.blurb.forEach((ln, k) => g.fillText(ln, r.x + r.w / 2, r.y + 198 + k * 17));
 
